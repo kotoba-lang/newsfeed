@@ -1,0 +1,399 @@
+;; The source catalog and the channels that consume it.
+;;
+;; Every feed below was fetched before being listed, and carries what that
+;; fetch measured (`:newsfeed/verified*`). Candidates that did not answer are
+;; recorded at the bottom rather than deleted, so the next person does not
+;; spend the same twenty minutes rediscovering them.
+;;
+;; Attribute names are `news.schema`'s `:news.source/*` (cloud-itonami/news).
+;;
+;; :news.source/credibility is an EDITORIAL WEIGHT used for ranking and for
+;; breaking dedupe ties — it is not a claim about truthfulness. Vendor and
+;; primary sources score high because they are first-party about their own
+;; product, which is exactly what makes them a good citation and also what
+;; makes them promotional; the channel's job is to cite them, not to believe
+;; them.
+;;
+;; :newsfeed/has-summary false is measured, not assumed: those feeds ship an
+;; empty or absent <description>, so a consumer gets a headline and a link and
+;; must not be written as though a summary will be there.
+
+{:sources/version 1
+
+ :sources
+ [;; ── GPU / AI compute ────────────────────────────────────────────────────
+  {:news.source/sourceId "nvidia-developer"
+   :news.source/class "vendor"
+   :news.source/name "NVIDIA Technical Blog"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://developer.nvidia.com/blog/feed"
+   :news.source/url "https://developer.nvidia.com/blog/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official true
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.90
+   :news.source/topics ["gpu" "ai" "cuda"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-dialect :atom
+   :newsfeed/verified-items 100
+   :newsfeed/has-summary true}
+
+  {:news.source/sourceId "nvidia-newsroom"
+   :news.source/class "press"
+   :news.source/name "NVIDIA Newsroom"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://nvidianews.nvidia.com/releases.xml"
+   :news.source/url "https://nvidianews.nvidia.com/"
+   :news.source/sourceType "press"
+   :news.source/lang "en"
+   :news.source/official true
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.88
+   :news.source/topics ["gpu" "ai" "corporate"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 20}
+
+  {:news.source/sourceId "arxiv-cs-ar"
+   :news.source/class "preprint"
+   :news.source/name "arXiv cs.AR (Hardware Architecture)"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://export.arxiv.org/api/query?search_query=cat:cs.AR&sortBy=submittedDate&sortOrder=descending&max_results=40"
+   :news.source/url "https://arxiv.org/list/cs.AR/recent"
+   :news.source/sourceType "original"
+   :news.source/lang "en"
+   :news.source/official true
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.85
+   :news.source/topics ["architecture" "hardware"]
+   :news.source/status "active"
+   ;; The advertised RSS endpoints (export.arxiv.org/rss/… and rss.arxiv.org)
+   ;; both answer 200 with zero items as of 2026-08-03. The Atom API does work,
+   ;; so the API is the source of record here.
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-dialect :atom
+   :newsfeed/verified-items 25
+   :newsfeed/has-summary true}
+
+  {:news.source/sourceId "arxiv-cs-lg"
+   :news.source/class "preprint"
+   :news.source/name "arXiv cs.LG (Machine Learning)"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://export.arxiv.org/api/query?search_query=cat:cs.LG&sortBy=submittedDate&sortOrder=descending&max_results=40"
+   :news.source/url "https://arxiv.org/list/cs.LG/recent"
+   :news.source/sourceType "original"
+   :news.source/lang "en"
+   :news.source/official true
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.85
+   :news.source/topics ["ml" "ai"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"}
+
+  {:news.source/sourceId "phoronix"
+   :news.source/class "trade"
+   :news.source/name "Phoronix"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://www.phoronix.com/rss.php"
+   :news.source/url "https://www.phoronix.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.72
+   :news.source/topics ["linux" "gpu" "benchmark"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 32
+   :newsfeed/has-summary true}
+
+  {:news.source/sourceId "semianalysis"
+   :news.source/class "analysis"
+   :news.source/name "SemiAnalysis"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://www.semianalysis.com/feed"
+   :news.source/url "https://www.semianalysis.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.75
+   :news.source/topics ["semiconductor" "datacenter" "gpu"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 10}
+
+  {:news.source/sourceId "huggingface-blog"
+   :news.source/class "community"
+   :news.source/name "Hugging Face Blog"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://huggingface.co/blog/feed.xml"
+   :news.source/url "https://huggingface.co/blog"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.70
+   :news.source/topics ["ai" "ml" "community"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 834
+   ;; measured: <item> carries title/link/pubDate/guid and nothing else
+   :newsfeed/has-summary false}
+
+  {:news.source/sourceId "tomshardware"
+   :news.source/class "trade"
+   :news.source/name "Tom's Hardware"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://www.tomshardware.com/feeds/all"
+   :news.source/url "https://www.tomshardware.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.58
+   :news.source/topics ["hardware" "gpu" "consumer"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 50}
+
+  {:news.source/sourceId "vllm-releases"
+   :news.source/class "release"
+   :news.source/name "vLLM releases"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://github.com/vllm-project/vllm/releases.atom"
+   :news.source/url "https://github.com/vllm-project/vllm/releases"
+   :news.source/sourceType "original"
+   :news.source/lang "en"
+   :news.source/official true
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.80
+   :news.source/topics ["inference" "serving"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-dialect :atom
+   :newsfeed/verified-items 10}
+
+  {:news.source/sourceId "llamacpp-releases"
+   :news.source/class "release"
+   :news.source/name "llama.cpp releases"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://github.com/ggml-org/llama.cpp/releases.atom"
+   :news.source/url "https://github.com/ggml-org/llama.cpp/releases"
+   :news.source/sourceType "original"
+   :news.source/lang "en"
+   :news.source/official true
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.74
+   :news.source/topics ["inference" "local"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 10}
+
+  ;; ── storage ─────────────────────────────────────────────────────────────
+  {:news.source/sourceId "blocksandfiles"
+   :news.source/class "trade"
+   :news.source/name "Blocks & Files"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://blocksandfiles.com/feed/"
+   :news.source/url "https://blocksandfiles.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.82
+   :news.source/topics ["storage"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 70
+   ;; measured: <description><![CDATA[]]></description> — always empty
+   :newsfeed/has-summary false}
+
+  {:news.source/sourceId "storagereview"
+   :news.source/class "trade"
+   :news.source/name "StorageReview"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://www.storagereview.com/feed"
+   :news.source/url "https://www.storagereview.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.70
+   :news.source/topics ["storage" "review"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 30}
+
+  {:news.source/sourceId "theregister"
+   :news.source/class "trade"
+   :news.source/name "The Register"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://www.theregister.com/headlines.atom"
+   :news.source/url "https://www.theregister.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.65
+   :news.source/topics ["it" "storage" "ai"]
+   :news.source/status "active"
+   ;; The per-section feed (/storage/headlines.atom) is 404; only the
+   ;; all-sections feed exists, so BOTH channels read it and each relies on its
+   ;; own keyword and url-hint gate to take only what is theirs.
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 50
+   :newsfeed/all-sections true}
+
+  {:news.source/sourceId "openzfs-releases"
+   :news.source/class "release"
+   :news.source/name "OpenZFS releases"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://github.com/openzfs/zfs/releases.atom"
+   :news.source/url "https://github.com/openzfs/zfs/releases"
+   :news.source/sourceType "original"
+   :news.source/lang "en"
+   :news.source/official true
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.80
+   :news.source/topics ["filesystem" "storage"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 10}
+
+  {:news.source/sourceId "minio-releases"
+   :news.source/class "release"
+   :news.source/name "MinIO releases"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://github.com/minio/minio/releases.atom"
+   :news.source/url "https://github.com/minio/minio/releases"
+   :news.source/sourceType "original"
+   :news.source/lang "en"
+   :news.source/official true
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.76
+   :news.source/topics ["object-storage" "s3"]
+   :news.source/status "active"
+   ;; blog.min.io/rss and /rss.xml both answer 200 with zero items; the
+   ;; releases feed is the working one.
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 10}
+
+  {:news.source/sourceId "seaweedfs-releases"
+   :news.source/class "release"
+   :news.source/name "SeaweedFS releases"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://github.com/seaweedfs/seaweedfs/releases.atom"
+   :news.source/url "https://github.com/seaweedfs/seaweedfs/releases"
+   :news.source/sourceType "original"
+   :news.source/lang "en"
+   :news.source/official true
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.70
+   :news.source/topics ["object-storage" "distributed"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 10}
+
+  {:news.source/sourceId "iceberg-releases"
+   :news.source/class "release"
+   :news.source/name "Apache Iceberg releases"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://github.com/apache/iceberg/releases.atom"
+   :news.source/url "https://github.com/apache/iceberg/releases"
+   :news.source/sourceType "original"
+   :news.source/lang "en"
+   :news.source/official true
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.74
+   :news.source/topics ["table-format" "lakehouse"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 10}]
+
+ ;; Probed 2026-08-03 and NOT listed above. Kept so the next attempt starts
+ ;; from what was already measured.
+ :rejected
+ [{:url "http://export.arxiv.org/rss/cs.AR"   :status 200 :items 0 :reason "RSS endpoint serves an empty document; use the Atom API"}
+  {:url "https://rss.arxiv.org/rss/cs.LG"     :status 200 :items 0 :reason "same"}
+  {:url "https://pytorch.org/feed.xml"        :status 404 :reason "no such feed"}
+  {:url "https://www.theregister.com/storage/headlines.atom" :status 404 :reason "per-section feeds do not exist; use /headlines.atom"}
+  {:url "https://ceph.io/en/news/blog/index.xml" :status 404 :reason "no feed found at the documented path"}
+  {:url "https://ceph.io/index.xml"           :status 404 :reason "same"}
+  {:url "https://blog.min.io/rss/"            :status 200 :items 0 :reason "empty document"}
+  {:url "https://www.snia.org/rss.xml"        :status 403 :reason "blocks non-browser agents"}]
+
+ ;; ── channels ────────────────────────────────────────────────────────────
+ ;;
+ ;; A channel is a lens over the same article pool, not a private set of feeds.
+ ;; :sources may overlap (The Register feeds both) — the keyword and url-hint
+ ;; gates decide what belongs to whom.
+ ;;
+ ;; :min-score exists because one shared all-sections feed will otherwise put
+ ;; an article about Windows activation errors into a storage channel. Measured
+ ;; on the first real ingest; see the ADR.
+ :channels
+ [{:channel/id :murakumo-gpu-ai
+   :channel/site "murakumo.cloud"
+   :channel/title "murakumo GPU/AI news"
+   :channel/description "GPU と AI 推論・学習まわりの最新ニュースを、図解モーショングラフィックスで。"
+   :channel/lang [:en :ja]
+   :channel/sources ["nvidia-developer" "nvidia-newsroom" "arxiv-cs-ar" "arxiv-cs-lg"
+                     "phoronix" "semianalysis" "huggingface-blog" "tomshardware"
+                     "vllm-releases" "llamacpp-releases" "theregister"
+                     ;; Listed on this channel too, on measured evidence rather
+                     ;; than by beat: its KV-cache and GPU-adjacent reporting
+                     ;; (ScaleFlux, VAST/AMD) scored into the GPU/AI top six on
+                     ;; 2026-08-03. The keyword gate keeps the pure-storage
+                     ;; items out.
+                     "storagereview"]
+   :channel/min-score 4
+   :channel/window-days 7
+   ;; Editorial spread, not relevance. Measured 2026-08-03: ranking alone put
+   ;; four arXiv preprints in the top six — correctly scored (an abstract is
+   ;; keyword-dense by construction) and wrong for a news bulletin. A preprint
+   ;; is a citation; at most one may lead.
+   :channel/max-per-source 2
+   :channel/max-per-class {"preprint" 1 "release" 2 "trade" 2 :default 2}
+   :channel/source-bias {"arxiv-cs-ar" -3 "arxiv-cs-lg" -3}
+   :channel/keywords
+   {3 ["gpu" "cuda" "hbm" "tensor core" "nvlink" "blackwell" "hopper" "rocm" "tpu"
+       "inference" "llm" "quantization" "kv cache" "flash attention" "vllm"
+       "moe" "mixture of experts" "tflops" "petaflop" "attention" "transformer"
+       "fine-tuning" "pretraining" "accelerator" "interconnect"]
+    2 ["ai" "model" "pytorch" "triton" "kernel" "throughput" "latency" "fp8" "int4"
+       "int8" "sparsity" "compiler" "benchmark" "training" "serving" "batch"
+       "context length" "datacenter" "cluster" "scaling"]
+    1 ["nvidia" "amd" "intel" "chip" "silicon" "memory bandwidth" "wafer" "hpc"
+       "supercomputer" "open weights"]}
+   :channel/url-hints {"/ai/" 3 "/hpc/" 2 "developer.nvidia.com" 3 "arxiv.org" 2
+                       "/offbeat/" -6 "/legal/" -3 "/bootnotes/" -6}}
+
+  {:channel/id :kotobase-storage
+   :channel/site "kotobase.net"
+   :channel/title "kotobase storage news"
+   :channel/description "ストレージ・ファイルシステム・オブジェクトストレージの最新ニュースを、図解モーショングラフィックスで。"
+   :channel/lang [:en :ja]
+   :channel/sources ["blocksandfiles" "storagereview" "theregister"
+                     "openzfs-releases" "minio-releases" "seaweedfs-releases"
+                     "iceberg-releases" "phoronix"]
+   :channel/min-score 4
+   :channel/window-days 7
+   ;; Measured 2026-08-03: five of the top six came from one trade outlet. The
+   ;; storage trade press is small, so the class cap is looser here than on the
+   ;; GPU channel — but no single outlet may supply more than two.
+   :channel/max-per-source 2
+   :channel/max-per-class {"trade" 4 "release" 2 :default 2}
+   :channel/keywords
+   {3 ["storage" "ssd" "nvme" "nand" "hdd" "object storage" "block storage"
+       "filesystem" "file system" "zfs" "ceph" "erasure coding" "raid"
+       "qlc" "tlc" "hamr" "tape" "lakehouse" "iceberg" "parquet"
+       "deduplication" "snapshot" "s3" "petabyte" "exabyte"]
+    2 ["capacity" "iops" "durability" "replication" "tiering" "backup" "archive"
+       "data lake" "cxl" "dram" "memory pool" "flash" "controller" "array"
+       "throughput" "latency"]
+    1 ["cloud" "disk" "cache" "volume" "bucket" "migration"]}
+   :channel/url-hints {"/storage/" 4 "blocksandfiles.com" 3 "storagereview.com" 3
+                       "/offbeat/" -6 "/bootnotes/" -6 "/security/" -1}}]}

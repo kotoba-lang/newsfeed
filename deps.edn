@@ -1,0 +1,11 @@
+;; ClojureScript (nbb) is this repo's first runtime — CLAUDE.md runtime
+;; priority. This alias exists only so the same .cljc runs on the JVM as a
+;; portability check; nothing here is JVM-only.
+{:paths ["src" "resources"]
+ :deps {}
+ :aliases
+ {:test {:extra-paths ["test"]
+         :extra-deps {io.github.cognitect-labs/test-runner
+                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+         :main-opts ["-m" "cognitect.test-runner"]
+         :exec-fn cognitect.test-runner.api/test}}}
