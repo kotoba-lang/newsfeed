@@ -1,4 +1,3 @@
-state/
 .cpcache/
 node_modules/
 *.brief.edn
