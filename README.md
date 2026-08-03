@@ -123,3 +123,30 @@ fleet and a second scheduler would be a second answer to "is it time yet".
 No prose is generated here: `:brief/topic` is the lead headline verbatim, and
 the only generative step in the pipeline stays where it already was, in
 `dougaka-vector`'s storyboard actor.
+
+## 台帳の永続化（DataLad + B2、ADR-2608031900）
+
+`state/articles.ledger.edn` は **append-only の観測記録**で、日次 ingest のたびに
+育つ。以前は `.gitignore` で捨てていたので、**run を跨いだ dedup が実際には一度も
+効いていなかった**（毎回 clone 直後の空 ledger に対して「0 already in ledger」と
+報告していた）。
+
+いまはこの repo 自身が DataLad dataset で、`state/**` だけが annex → Backblaze B2
+に載る。git 側はポインタのみ（実測: 1.38 MB の台帳が git 上 131 byte）。
+
+```bash
+# 認証（値は repo に置かない。参照先は manifest/repos.edn の :b2 :credentials）
+eval "$(nbb --classpath orgs/kotoba-lang/secret-resolve/src:scripts/nbb_compat:. \
+        scripts/b2-creds.cljs)"          # superproject 側で実行
+export AWS_ACCESS_KEY_ID=$B2_KEY_ID AWS_SECRET_ACCESS_KEY=$B2_APP_KEY
+
+nbb --classpath src:resources bin/ingest.cljs   # 追記
+datalad save -m "ingest <date>"                 # annex 化してコミット
+datalad push --to b2                            # 実体を B2 へ
+git annex drop state/articles.ledger.edn        # 手元を解放（B2 から戻せる）
+git annex get  state/articles.ledger.edn        # B2 から復元
+```
+
+**`.gitattributes` はパスで明示的に振り分ける。** `datalad create -c text2git` の
+既定（バイナリなら annex）は中身 sniffing なので、実体がテキスト EDN のこの dataset
+では目的を満たさない。`com-junkawasaki/product-corpus` と同じ判断。
