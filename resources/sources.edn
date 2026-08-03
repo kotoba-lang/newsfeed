@@ -311,7 +311,213 @@
    :news.source/topics ["table-format" "lakehouse"]
    :news.source/status "active"
    :newsfeed/verified "2026-08-03"
-   :newsfeed/verified-items 10}]
+   :newsfeed/verified-items 10}
+
+  ;; ── 海運 / 物流 / サプライチェーン ──────────────────────────────────────
+  ;;
+  ;; 追加の動機は「MOL (商船三井) のプレスリリースを取り込めるか」だったが、
+  ;; **MOL は RSS/Atom を公開していない** — www.mol.co.jp の press ページにも
+  ;; トップにも autodiscovery link が無く、推測した 4 つの URL はいずれも
+  ;; 200 で空文書を返す (:rejected 参照)。NYK / K-Line / 国交省 も同じで、
+  ;; 一次情報が HTML しか無い発行者はこの取得層では構造的に扱えない。
+  ;;
+  ;; したがってこの群は **一次情報 (ONE / METI) + 業界トレード press** で構成する。
+  ;;
+  ;; 実測 2026-08-03 (1,569 article を ingest した実 ledger 上):
+  ;;   Mitsui O.S.K./商船三井  0 件
+  ;;   NYK/日本郵船            1 件 (`NYK moves to absorb NS United in near $1bn deal`, splash247)
+  ;;   K-Line/川崎汽船         0 件
+  ;;   ONE                    4 件 (自社 feed)
+  ;;
+  ;; **つまり MOL は発行者としても主題としても、この 1 週間では 1 件も入らない。**
+  ;; トレード press を足せば届く、と最初に書いたのは誤りだった — `MOL Group buys
+  ;; Shell's subsidiary in Cyprus for $720 million` (offshore-energy) を商船三井の
+  ;; 記事として数えていたが、これは**ハンガリーの石油会社 MOL Nyrt.** である。
+  ;; `MOL` は 3 文字略語として衝突するので、keyword にも判定にも使ってはならない
+  ;; (channel の keyword は `商船三井` / `Mitsui O.S.K.` という曖昧でない表記だけを持つ)。
+  ;;
+  ;; 残る到達経路は ONE (コンテナ部門の合弁なので MOL の一次情報でもある) と、
+  ;; MOL が大きく動いたときにトレード press が書く記事の 2 つだけ。日本語の
+  ;; 一般紙・専門紙 (日本海事新聞など) を足すか、HTML しか無い発行者を扱える
+  ;; 取得経路を別に用意しない限り、この穴は埋まらない。
+
+  {:news.source/sourceId "one-line"
+   :news.source/class "press"
+   :news.source/name "Ocean Network Express (ONE) News"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://www.one-line.com/en/rss.xml"
+   :news.source/url "https://www.one-line.com/en/news"
+   :news.source/sourceType "press"
+   :news.source/lang "en"
+   :news.source/official true
+   :news.source/rightsPolicy "fair-use-quote"
+   ;; 日本の海運 3 社 (MOL/NYK/K-Line) のコンテナ部門を統合した合弁なので、
+   ;; コンテナ航路については 3 社の一次情報でもある。
+   :news.source/credibility 0.88
+   :news.source/topics ["shipping" "container" "logistics"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 10
+   :newsfeed/has-summary true}
+
+  {:news.source/sourceId "meti"
+   :news.source/class "official"
+   :news.source/name "経済産業省 ニュースリリース"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://www.meti.go.jp/ml_index_release_atom.xml"
+   :news.source/url "https://www.meti.go.jp/press/"
+   :news.source/sourceType "official"
+   :news.source/lang "ja"
+   :news.source/official true
+   :news.source/rightsPolicy "fair-use-quote"
+   ;; 政府一次情報。この roster で唯一の日本語 feed。
+   :news.source/credibility 0.92
+   :news.source/topics ["policy" "industry" "energy" "logistics"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-dialect :atom
+   :newsfeed/verified-items 25
+   :newsfeed/has-summary true}
+
+  {:news.source/sourceId "gcaptain"
+   :news.source/class "trade"
+   :news.source/name "gCaptain"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://gcaptain.com/feed/"
+   :news.source/url "https://gcaptain.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.78
+   :news.source/topics ["shipping" "maritime" "tanker"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 12
+   :newsfeed/has-summary true}
+
+  {:news.source/sourceId "splash247"
+   :news.source/class "trade"
+   :news.source/name "Splash 247"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://splash247.com/feed/"
+   :news.source/url "https://splash247.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.76
+   :news.source/topics ["shipping" "maritime" "corporate"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 10
+   :newsfeed/has-summary true}
+
+  {:news.source/sourceId "maritime-executive"
+   :news.source/class "trade"
+   :news.source/name "The Maritime Executive"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://maritime-executive.com/articles.rss"
+   :news.source/url "https://maritime-executive.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.76
+   :news.source/topics ["shipping" "maritime" "port"]
+   :news.source/status "active"
+   ;; この roster で最大の feed。1 outlet で 56 item 出るので、channel 側の
+   ;; :max-per-source が無いと running order を独占する。
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 56
+   :newsfeed/has-summary true}
+
+  {:news.source/sourceId "container-news"
+   :news.source/class "trade"
+   :news.source/name "Container News"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://container-news.com/feed/"
+   :news.source/url "https://container-news.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.72
+   :news.source/topics ["container" "shipping" "port"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 10
+   :newsfeed/has-summary true}
+
+  {:news.source/sourceId "offshore-energy"
+   :news.source/class "trade"
+   :news.source/name "Offshore Energy"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://www.offshore-energy.biz/feed/"
+   :news.source/url "https://www.offshore-energy.biz/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.72
+   :news.source/topics ["energy" "lng" "offshore" "shipping"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 10
+   :newsfeed/has-summary true}
+
+  {:news.source/sourceId "joc"
+   :news.source/class "trade"
+   :news.source/name "Journal of Commerce"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://www.joc.com/rss.xml"
+   :news.source/url "https://www.joc.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.80
+   :news.source/topics ["logistics" "freight" "port" "trade"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 40
+   :newsfeed/has-summary true}
+
+  {:news.source/sourceId "freightwaves"
+   :news.source/class "trade"
+   :news.source/name "FreightWaves"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://www.freightwaves.com/feed"
+   :news.source/url "https://www.freightwaves.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   ;; 実測: トラック輸送・犯罪ニュースの比率が高く、海運の running order へは
+   ;; keyword gate と source-bias で絞ってから入れる。
+   :news.source/credibility 0.70
+   :news.source/topics ["freight" "trucking" "logistics"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 50
+   :newsfeed/has-summary true}
+
+  {:news.source/sourceId "supplychaindive"
+   :news.source/class "trade"
+   :news.source/name "Supply Chain Dive"
+   :news.source/kind "rss"
+   :news.source/feedUrl "https://www.supplychaindive.com/feeds/news/"
+   :news.source/url "https://www.supplychaindive.com/"
+   :news.source/sourceType "rss"
+   :news.source/lang "en"
+   :news.source/official false
+   :news.source/rightsPolicy "fair-use-quote"
+   :news.source/credibility 0.74
+   :news.source/topics ["supply-chain" "logistics" "procurement"]
+   :news.source/status "active"
+   :newsfeed/verified "2026-08-03"
+   :newsfeed/verified-items 10
+   :newsfeed/has-summary true}]
 
  ;; Probed 2026-08-03 and NOT listed above. Kept so the next attempt starts
  ;; from what was already measured.
@@ -323,7 +529,25 @@
   {:url "https://ceph.io/en/news/blog/index.xml" :status 404 :reason "no feed found at the documented path"}
   {:url "https://ceph.io/index.xml"           :status 404 :reason "same"}
   {:url "https://blog.min.io/rss/"            :status 200 :items 0 :reason "empty document"}
-  {:url "https://www.snia.org/rss.xml"        :status 403 :reason "blocks non-browser agents"}]
+  {:url "https://www.snia.org/rss.xml"        :status 403 :reason "blocks non-browser agents"}
+
+  ;; 海運/物流の候補、2026-08-03。**発行者に feed が無い**ケースが多く、
+  ;; これは「まだ見つけていない」ではなく「公開していない」— HTML の
+  ;; autodiscovery link (<link rel=alternate type=application/rss+xml>) も
+  ;; press ページ・トップとも 0 件だった。
+  {:url "https://www.mol.co.jp/rss/pr.xml"     :status 200 :items 0 :reason "空文書。MOL(商船三井) は RSS を公開していない — /pr/ もトップも autodiscovery link 無し"}
+  {:url "https://www.mol.co.jp/pr/rss.xml"     :status 200 :items 0 :reason "same"}
+  {:url "https://www.mol.co.jp/rss.xml"        :status 200 :items 0 :reason "same"}
+  {:url "https://www.mol.co.jp/en/pr/rss.xml"  :status 200 :items 0 :reason "same (英語サイトも同じ)"}
+  {:url "https://www.nyk.com/news/feed/"       :status 404 :reason "日本郵船も feed 無し。/news/ に autodiscovery link 無し"}
+  {:url "https://www.nyk.com/rss/news.xml"     :status 404 :reason "same"}
+  {:url "https://www.kline.co.jp/rss/news.xml" :status 200 :items 0 :reason "川崎汽船。空文書"}
+  {:url "https://www.kline.co.jp/news/rss.xml" :status 404 :reason "same"}
+  {:url "https://www.mlit.go.jp/press.rdf"     :status 404 :reason "国土交通省。RDF の記載パスは現存せず、/report/press/ にも autodiscovery link 無し"}
+  {:url "https://www.mlit.go.jp/report/press/index.rdf" :status 404 :reason "same"}
+  {:url "https://lloydslist.com/rss"           :status 403 :reason "paywall + 非ブラウザ UA を拒否"}
+  {:url "https://www.classnk.or.jp/hp/ja/rss.xml" :status 403 :reason "日本海事協会。非ブラウザ UA を拒否"}
+  {:url "https://www.jmuc.co.jp/rss.xml"       :status 404 :reason "no such feed"}]
 
  ;; ── channels ────────────────────────────────────────────────────────────
  ;;
@@ -396,4 +620,45 @@
        "throughput" "latency"]
     1 ["cloud" "disk" "cache" "volume" "bucket" "migration"]}
    :channel/url-hints {"/storage/" 4 "blocksandfiles.com" 3 "storagereview.com" 3
-                       "/offbeat/" -6 "/bootnotes/" -6 "/security/" -1}}]}
+                       "/offbeat/" -6 "/bootnotes/" -6 "/security/" -1}}
+
+  {:channel/id :itonami-supply-chain
+   :channel/site "itonami.cloud"
+   :channel/title "itonami 海運・物流ニュース"
+   :channel/description "海運・港湾・サプライチェーンの最新ニュースを、図解モーショングラフィックスで。"
+   :channel/lang [:en :ja]
+   :channel/sources ["one-line" "meti" "gcaptain" "splash247" "maritime-executive"
+                     "container-news" "offshore-energy" "joc" "freightwaves"
+                     "supplychaindive"]
+   :channel/min-score 4
+   :channel/window-days 7
+   ;; maritime-executive は 1 outlet で 56 item 出る (roster 最大)。トレード press の
+   ;; 層が GPU/storage より厚いので class 上限は緩めだが、source 上限は同じ 2。
+   :channel/max-per-source 2
+   :channel/max-per-class {"trade" 4 "press" 2 "official" 2 :default 2}
+   ;; FreightWaves は実測でトラック輸送・犯罪ニュースの比率が高く、海運の
+   ;; running order に入れると本題を押し出す。keyword gate で拾えるものだけ通す。
+   :channel/source-bias {"freightwaves" -2}
+   :channel/keywords
+   {3 ["shipping" "container" "vessel" "tanker" "bulk carrier" "lng carrier"
+       "port" "terminal" "freight rate" "charter" "shipyard" "newbuilding"
+       "海運" "商船三井" "日本郵船" "川崎汽船" "港湾" "コンテナ" "造船"
+       ;; 社名は曖昧でない表記だけ。"MOL" 単体は MOL Nyrt.(ハンガリーの石油会社)
+       ;; と衝突するので入れない。
+       "mitsui o.s.k." "nippon yusen" "kawasaki kisen" "ocean network express"
+       "supply chain" "サプライチェーン" "物流"]
+    2 ["logistics" "cargo" "teu" "dwt" "imo" "decarbonisation" "decarbonization"
+       "ammonia" "methanol" "bunker" "emission" "route" "canal" "congestion"
+       "carrier" "shipowner" "fleet" "貿易" "輸出" "輸入" "脱炭素"]
+    1 ["trade" "tariff" "warehouse" "rail" "trucking" "procurement" "inventory"
+       "経済産業省" "国土交通省"]}
+   ;; MOL / NYK / K-Line は feed を持たないので発行者として購読できない。出来事と
+   ;; してトレード press に載ることはある (実測 2026-08-03 の 1,569 article では
+   ;; NYK の NS United 買収 1 件のみ、商船三井は 0 件) ので、3 点タイアに社名を
+   ;; 置いて拾えたときは確実に押し上げる。**`MOL` を keyword にはしない** —
+   ;; ハンガリーの石油会社 MOL Nyrt. と衝突し、実際にその記事を商船三井と
+   ;; 誤認しかけた (:sources の該当コメント参照)。
+   :channel/url-hints {"/shipping/" 3 "/ports/" 3 "/logistics/" 2
+                       "gcaptain.com" 2 "splash247.com" 2 "maritime-executive.com" 2
+                       "meti.go.jp" 2
+                       "/trucking/" -3 "/crime/" -4 "/opinion/" -2}}]}
