@@ -19,7 +19,7 @@
             ["path" :as path]
             ["crypto" :as crypto]
             [clojure.edn :as edn]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             [promesa.core :as p]
             [newsfeed.parse :as parse]
             [newsfeed.article :as article]))

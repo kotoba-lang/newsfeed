@@ -16,7 +16,7 @@
    wins over it.
 
    Pure `.cljc`."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 (defn by-source-id [catalog]
   (into {} (map (juxt :news.source/sourceId identity)) (:sources catalog)))

@@ -9,7 +9,7 @@
    adding a fourth dialect touches this namespace alone.
 
    Pure `.cljc`."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [newsfeed.xml :as xml]
             [newsfeed.instant :as instant]))
 

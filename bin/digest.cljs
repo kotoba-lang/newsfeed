@@ -15,7 +15,7 @@
   (:require ["fs" :as fs]
             ["path" :as path]
             [clojure.edn :as edn]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             [cljs.pprint :as pprint]
             [newsfeed.catalog :as catalog]
             [newsfeed.digest :as digest]))
