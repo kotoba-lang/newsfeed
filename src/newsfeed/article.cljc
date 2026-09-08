@@ -13,7 +13,7 @@
    pure so the mapping is testable without either.
 
    Pure `.cljc`."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [newsfeed.instant :as instant]))
 
 ;; ── canonical url ────────────────────────────────────────────────────────────
@@ -33,17 +33,17 @@
     (let [u (first (str/split u #"#" 2))
           [base query] (str/split u #"\?" 2)
           [scheme rest] (if-let [i (str/index-of base "://")]
-                          [(str/lower-case (subs base 0 i)) (subs base (+ i 3))]
+                          [(str/lower (subs base 0 i)) (subs base (+ i 3))]
                           [nil base])
           [host path] (if scheme
                         (let [i (str/index-of rest "/")]
-                          (if i [(str/lower-case (subs rest 0 i)) (subs rest i)]
-                              [(str/lower-case rest) ""]))
+                          (if i [(str/lower (subs rest 0 i)) (subs rest i)]
+                              [(str/lower rest) ""]))
                         [nil rest])
           kept (when query
                  (->> (str/split query #"&")
                       (remove str/blank?)
-                      (remove #(tracking-params (str/lower-case (first (str/split % #"=" 2)))))
+                      (remove #(tracking-params (str/lower (first (str/split % #"=" 2)))))
                       (str/join "&")
                       not-empty))]
       (str (when scheme (str scheme "://")) host path (when kept (str "?" kept))))))
@@ -55,7 +55,7 @@
   (when-let [u (some-> url str/trim not-empty)]
     (let [after (if-let [i (str/index-of u "://")] (subs u (+ i 3)) u)
           h (first (str/split after #"[/?]"))
-          h (str/lower-case (or h ""))]
+          h (str/lower (or h ""))]
       (not-empty (if (str/starts-with? h "www.") (subs h 4) h)))))
 
 ;; ── mapping ──────────────────────────────────────────────────────────────────

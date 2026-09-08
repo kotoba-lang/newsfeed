@@ -21,13 +21,13 @@
 
    The result carries `:score/matched`, so a ranking can be explained rather
    than trusted. Pure `.cljc`."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 (defn- haystack [article]
-  (str/lower-case (str (:news/title article) " " (:news/summary article))))
+  (str/lower (str (:news/title article) " " (:news/summary article))))
 
 (defn- title-hay [article]
-  (str/lower-case (str (:news/title article))))
+  (str/lower (str (:news/title article))))
 
 (defn keyword-hits
   "→ [{:term :weight :in} …] for every catalog term present.
@@ -44,7 +44,7 @@
     (->> keywords
          (mapcat (fn [[w terms]]
                    (keep (fn [t]
-                           (let [t (str/lower-case t)]
+                           (let [t (str/lower t)]
                              (cond
                                (str/includes? ttl t) {:term t :weight (* 2 w) :in :title}
                                (str/includes? hay t) {:term t :weight w :in :summary}
@@ -55,8 +55,8 @@
 (defn url-hint-score
   "Sum of the hints whose substring appears in the article url."
   [article hints]
-  (let [u (str/lower-case (str (:news/url article)))]
-    (reduce-kv (fn [acc frag w] (if (str/includes? u (str/lower-case frag)) (+ acc w) acc))
+  (let [u (str/lower (str (:news/url article)))]
+    (reduce-kv (fn [acc frag w] (if (str/includes? u (str/lower frag)) (+ acc w) acc))
                0 (or hints {}))))
 
 (defn score

@@ -12,7 +12,7 @@
    being careful.
 
    Pure `.cljc`."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [newsfeed.article :as article]
             [newsfeed.catalog :as catalog]
             [newsfeed.score :as score]))
@@ -28,7 +28,7 @@
   "Content words of a title, lower-cased, punctuation dropped. Used only for
    near-duplicate detection, so precision matters more than recall."
   [title]
-  (->> (-> (str title) str/lower-case (str/replace #"[^a-z0-9 ]" " ") (str/split #"\s+"))
+  (->> (-> (str title) str/lower (str/replace #"[^a-z0-9 ]" " ") (str/split #"\s+"))
        (remove str/blank?)
        (remove stop-words)
        (remove #(< (count %) 3))

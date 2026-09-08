@@ -11,7 +11,7 @@
 
    Unparseable input returns nil rather than a guess. Callers keep the raw
    string alongside, so nothing is lost."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 ;; ── civil date arithmetic (Howard Hinnant's algorithms, integer-exact) ───────
 
@@ -76,7 +76,7 @@
   "\"+0900\" | \"+09:00\" | \"GMT\" | \"Z\" → minutes east of UTC, or nil."
   [tz]
   (when-let [tz (some-> tz str/trim not-empty)]
-    (let [low (str/lower-case tz)]
+    (let [low (str/lower tz)]
       (or (zone-min low)
           (when (#{"+" "-"} (subs tz 0 1))
             (let [sign (if (= "-" (subs tz 0 1)) -1 1)
@@ -98,7 +98,7 @@
         (let [[d mon y t & more] parts
               [h mi sec] (str/split (or t "") #":")
               tz (offset->min (or (first more) "gmt"))]
-          (when-let [mo (months (str/lower-case (str mon)))]
+          (when-let [mo (months (str/lower (str mon)))]
             (let [dd (->int d) yy (->int y) hh (->int h) mm (->int mi)]
               (when (and dd yy hh mm)
                 (->iso (if (< yy 100) (+ 1900 yy) yy) mo dd hh mm

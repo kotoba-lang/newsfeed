@@ -15,7 +15,7 @@
    Scanning is by `str/index-of` rather than per-character, because per-char
    `subs` on a 500 KB feed allocates once per character in both runtimes. The
    char-wise helpers are used only inside tag headers, which are short."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 ;; ── character helpers (short spans only) ─────────────────────────────────────
 
@@ -105,12 +105,12 @@
               (if (or (= q "\"") (= q "'"))
                 (let [end (or (str/index-of s q (inc j)) (count s))]
                   (recur (skip-ws s (inc end))
-                         (assoc attrs (str/lower-case k) (decode-entities (subs s (inc j) end)))))
+                         (assoc attrs (str/lower k) (decode-entities (subs s (inc j) end)))))
                 ;; unquoted value
                 (let [[v j2] (read-name s j)]
-                  (recur (skip-ws s j2) (assoc attrs (str/lower-case k) (decode-entities v))))))
+                  (recur (skip-ws s j2) (assoc attrs (str/lower k) (decode-entities v))))))
             ;; valueless attribute
-            (recur j (cond-> attrs (seq k) (assoc (str/lower-case k) "")))))))))
+            (recur j (cond-> attrs (seq k) (assoc (str/lower k) "")))))))))
 
 ;; ── nodes ────────────────────────────────────────────────────────────────────
 
@@ -119,7 +119,7 @@
 (defn- parse-element [s i]
   (let [[tag j] (read-name s (inc i))
         [attrs j self?] (read-attrs s j)
-        el {:tag (str/lower-case tag) :attrs attrs}]
+        el {:tag (str/lower tag) :attrs attrs}]
     (if self?
       [(assoc el :children []) j]
       (let [[children j] (parse-nodes s j)
