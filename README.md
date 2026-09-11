@@ -18,18 +18,18 @@ no clock and no publishing key.
 
 ```bash
 # fetch every active source and append new articles to the ledger
-nbb --classpath src:resources bin/ingest.cljk
+kbb --backend sci --classpath src:resources bin/ingest.cljk
 
 # ...or see what would happen without writing
-nbb --classpath src:resources bin/ingest.cljk --dry-run --only phoronix,blocksandfiles
+kbb --backend sci --classpath src:resources bin/ingest.cljk --dry-run --only phoronix,blocksandfiles
 
 # ledger + channel -> the episode brief a video is produced from
-nbb --classpath src:resources bin/digest.cljk --channel murakumo-gpu-ai \
+kbb --backend sci --classpath src:resources bin/digest.cljk --channel murakumo-gpu-ai \
     --out brief.edn --explain
 
 # tests (ClojureScript first; the JVM alias runs the same .cljc as a check)
-nbb --classpath src:test test/run.cljk
-clojure -M:test
+kbb --backend sci --classpath src:test test/run.cljk
+kbb -M:test
 ```
 
 `digest.cljs` exits **0** with a brief and **3** when nothing cleared the
@@ -136,11 +136,11 @@ the only generative step in the pipeline stays where it already was, in
 
 ```bash
 # 認証（値は repo に置かない。参照先は manifest/repos.edn の :b2 :credentials）
-eval "$(nbb --classpath orgs/kotoba-lang/secret-resolve/src:scripts/nbb_compat:. \
+eval "$(kbb --backend sci --classpath orgs/kotoba-lang/secret-resolve/src:scripts/nbb_compat:. \
         scripts/b2-creds.cljs)"          # superproject 側で実行
 export AWS_ACCESS_KEY_ID=$B2_KEY_ID AWS_SECRET_ACCESS_KEY=$B2_APP_KEY
 
-nbb --classpath src:resources bin/ingest.cljk   # 追記
+kbb --backend sci --classpath src:resources bin/ingest.cljk   # 追記
 datalad save -m "ingest <date>"                 # annex 化してコミット
 datalad push --to b2                            # 実体を B2 へ
 git annex drop state/articles.ledger.edn        # 手元を解放（B2 から戻せる）
