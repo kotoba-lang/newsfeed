@@ -2,7 +2,7 @@
   "Fetch every active source, map items to article datoms, append the new ones
    to the ledger, and report per-source what actually happened.
 
-     nbb --classpath src:resources bin/ingest.cljs \\
+     nbb --classpath src:resources bin/ingest.cljk \\
        [--sources resources/sources.edn] [--ledger state/articles.ledger.edn] \\
        [--only <sourceId,…>] [--dry-run] [--concurrency 5]
 

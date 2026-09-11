@@ -18,17 +18,17 @@ no clock and no publishing key.
 
 ```bash
 # fetch every active source and append new articles to the ledger
-nbb --classpath src:resources bin/ingest.cljs
+nbb --classpath src:resources bin/ingest.cljk
 
 # ...or see what would happen without writing
-nbb --classpath src:resources bin/ingest.cljs --dry-run --only phoronix,blocksandfiles
+nbb --classpath src:resources bin/ingest.cljk --dry-run --only phoronix,blocksandfiles
 
 # ledger + channel -> the episode brief a video is produced from
-nbb --classpath src:resources bin/digest.cljs --channel murakumo-gpu-ai \
+nbb --classpath src:resources bin/digest.cljk --channel murakumo-gpu-ai \
     --out brief.edn --explain
 
 # tests (ClojureScript first; the JVM alias runs the same .cljc as a check)
-nbb --classpath src:test test/run.cljs
+nbb --classpath src:test test/run.cljk
 clojure -M:test
 ```
 
@@ -41,7 +41,7 @@ caller chaining into production needs to tell those apart without reading prose.
 ```
 resources/sources.edn   17 feeds + 2 channels, as data
         │
-   bin/ingest.cljs      fetch (IO)
+   bin/ingest.cljk      fetch (IO)
         │
  newsfeed.parse         RSS 2.0 | Atom 1.0 | RDF -> uniform items   (pure)
  newsfeed.article       item + source -> :news/* datom              (pure)
@@ -52,7 +52,7 @@ state/articles.ledger.edn    append-only, one EDN map per line
  newsfeed.score         rank for one channel, explainably           (pure)
  newsfeed.digest        cluster, spread, brief + citations          (pure)
         │
-   bin/digest.cljs      brief.edn (IO)
+   bin/digest.cljk      brief.edn (IO)
 ```
 
 Downstream, `:brief/topic` is the string handed to `dougaka-vector`'s
@@ -140,7 +140,7 @@ eval "$(nbb --classpath orgs/kotoba-lang/secret-resolve/src:scripts/nbb_compat:.
         scripts/b2-creds.cljs)"          # superproject 側で実行
 export AWS_ACCESS_KEY_ID=$B2_KEY_ID AWS_SECRET_ACCESS_KEY=$B2_APP_KEY
 
-nbb --classpath src:resources bin/ingest.cljs   # 追記
+nbb --classpath src:resources bin/ingest.cljk   # 追記
 datalad save -m "ingest <date>"                 # annex 化してコミット
 datalad push --to b2                            # 実体を B2 へ
 git annex drop state/articles.ledger.edn        # 手元を解放（B2 から戻せる）

@@ -1,7 +1,7 @@
 (ns digest
   "Ledger + channel → the episode brief, as EDN on stdout or to a file.
 
-     nbb --classpath src:resources bin/digest.cljs --channel murakumo-gpu-ai \\
+     nbb --classpath src:resources bin/digest.cljk --channel murakumo-gpu-ai \\
        [--ledger state/articles.ledger.edn] [--sources resources/sources.edn] \\
        [--out brief.edn] [--top 6] [--now 2026-08-03T00:00:00Z] [--explain]
 
