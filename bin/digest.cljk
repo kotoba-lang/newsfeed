@@ -14,7 +14,7 @@
    to tell the two apart without parsing prose."
   (:require ["fs" :as fs]
             ["path" :as path]
-            [clojure.edn :as edn]
+            [kotoba.lang.edn :as edn]
             [kotoba.lang.text :as str]
             [cljs.pprint :as pprint]
             [newsfeed.catalog :as catalog]
