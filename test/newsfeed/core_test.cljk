@@ -3,7 +3,7 @@
    the RFC 822 offsets, the empty CDATA description, the `rel=\"self\"` trap and
    the arXiv/StorageReview ranking behaviour all come from the 2026-08-03
    ingest, not from imagination."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [newsfeed.xml :as xml]
             [newsfeed.instant :as instant]
             [newsfeed.parse :as parse]
