@@ -18,7 +18,7 @@
   (:require ["fs" :as fs]
             ["path" :as path]
             ["crypto" :as crypto]
-            [clojure.edn :as edn]
+            [kotoba.lang.edn :as edn]
             [kotoba.lang.text :as str]
             [promesa.core :as p]
             [newsfeed.parse :as parse]
