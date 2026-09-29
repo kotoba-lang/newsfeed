@@ -1,5 +1,5 @@
 (ns run
-  "nbb test entry — ClojureScript is this repo's first runtime (CLAUDE.md
+  "nbb test entry — ClojureScript is this repo's first runtime (AGENTS.md
    runtime priority). deps.edn runs the same .cljc on the JVM as a compat check."
   (:require [kotoba.test :as t]
             [newsfeed.core-test]))

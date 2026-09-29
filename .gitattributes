@@ -7,7 +7,7 @@
 #   * annex.largefiles=((mimeencoding=binary)and(largerthan=0))
 # で「バイナリなら annex」。だがこの dataset の実体は state/*.ledger.edn という
 # *テキスト* の append-only 台帳なので、その既定のままだと日次で増える全観測が
-# git 履歴に直接入り、clone/pull を重くする（CLAUDE.md / skill
+# git 履歴に直接入り、clone/pull を重くする（AGENTS.md / skill
 # `large-binary-datalad` が禁じている状態そのもの）。内容 sniffing に任せず、
 # パスで明示的に振り分ける。com-junkawasaki/product-corpus と同じ判断。
 * annex.largefiles=nothing
